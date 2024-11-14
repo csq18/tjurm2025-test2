@@ -12,5 +12,24 @@ std::pair<cv::Rect, cv::RotatedRect> get_rect_by_contours(const cv::Mat& input) 
     */
     std::pair<cv::Rect, cv::RotatedRect> res;
     // IMPLEMENT YOUR CODE HERE
+    cv::Mat gray;
+    cv::cvtColor(input, gray, cv::COLOR_BGR2GRAY);
+
+    cv::Mat thresh;
+    cv::threshold(gray,thresh,100,255,cv::THRESH_BINARY);
+   
+    std::vector<std::vector<cv::Point>> contours;
+    cv::findContours(thresh, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);    
+   
+    for (const auto& contour : contours) {
+        std::vector<cv::Point> approx;
+        cv::approxPolyDP(contour, approx, cv::arcLength(contour, true) * 0.02, true);
+        
+        if (approx.size() == 4) {
+            cv::Rect rect = cv::boundingRect(contour);
+            cv::RotatedRect rotatedRect = cv::minAreaRect(contour);            
+        }
+    }
     return res;
 }
+       
