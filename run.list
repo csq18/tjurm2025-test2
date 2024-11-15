@@ -1,6 +1,7 @@
-find_contours
+rect
 
 stop
 
-
-find_contours
+rect
+erode
+roi

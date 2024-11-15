@@ -21,15 +21,18 @@ std::pair<cv::Rect, cv::RotatedRect> get_rect_by_contours(const cv::Mat& input) 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(thresh, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);    
    
+    cv::Mat drawing = input.clone();
     for (const auto& contour : contours) {
         std::vector<cv::Point> approx;
         cv::approxPolyDP(contour, approx, cv::arcLength(contour, true) * 0.02, true);
         
         if (approx.size() == 4) {
             cv::Rect rect = cv::boundingRect(contour);
-            cv::RotatedRect rotatedRect = cv::minAreaRect(contour);            
+            cv::RotatedRect rrect = cv::minAreaRect(contour); 
+            res = std::make_pair(rect,rrect);              
         }
-    }
+    }   
+    
     return res;
 }
        
